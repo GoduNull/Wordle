@@ -14,6 +14,11 @@
         <h1 id="title">Wordle</h1>
         <hr>
         <br>
+        <label for="category">Выберите категорию:</label>
+        <select id="category" onchange="handleCategoryChange()">
+  <option value="animals">Животные</option>
+  <option value="food">Еда</option>
+</select>
         <div id="board">
         </div>
 

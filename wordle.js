@@ -7,17 +7,58 @@ var col = 0;
 
 var gameOver = false;
 
-var zivList = ["лось","лисса","волк","заяц","конь",]
-var beardList = ["голуб","","волк","заяц","медвед","конь"]
 
-guessList = guessList.concat(wordList);
 
-var word = wordList[Math.floor(Math.random()*wordList.length)].toUpperCase();
-console.log(word);
+var animalsList = ["лось","лисса","волк","заяц","конь",]
+var eatList = ["пицца","суши","лук", "груша", "рис", "сыр"]
+
+
+var word;
 
 window.onload = function(){
     intialize();
 }
+
+function handleCategoryChange() {
+    var category = document.getElementById("category").value;
+
+    var resultElement = document.getElementById("result");
+
+    if (category === "animals") {
+        word = animalsList[Math.floor(Math.random()*animalsList.length)].toUpperCase();
+        console.log(word);
+        var element = document.getElementById("board");
+        element.innerHTML = "";
+        for (let r = 0; r < height; r++) {
+            for (let c = 0; c < width; c++) {
+                let tile = document.createElement("span");
+                tile.id = r.toString() + "-" + c.toString();
+                tile.classList.add("tile");
+                tile.innerText = "";
+                document.getElementById("board").appendChild(tile);
+            }
+        }
+    }  
+    else if (category === "food") {
+        word = eatList[Math.floor(Math.random()*eatList.length)].toUpperCase();
+        console.log(word);
+
+        var element = document.getElementById("board");
+        element.innerHTML = "";
+      for (let r = 0; r < height; r++) {
+        for (let c = 0; c < width; c++) {
+            let tile = document.createElement("span");
+            tile.id = r.toString() + "-" + c.toString();
+            tile.classList.add("tile");
+            tile.innerText = "";
+            document.getElementById("board").appendChild(tile);
+        }
+    }
+
+    }
+}
+
+
 
 
 function intialize() {
@@ -128,11 +169,19 @@ function update() { //проверка угаданости слова и обн
 
     guess = guess.toLowerCase();
     console.log(guess);
-
-    if (!guessList.includes(guess)) {
-        document.getElementById("answer").innerText = "Not in word list";
-        return;
+    if (category === "animals") {
+        if (!animalsList.includes(guess)) {
+            document.getElementById("answer").innerText = "Not in word list";
+            return;
+        }
+    }  
+    else if (category === "food") {
+        if (!eatList.includes(guess)) {
+            document.getElementById("answer").innerText = "Not in word list";
+            return;
+        }
     }
+
     
     let correct = 0; // проверка угаданых букв
 
