@@ -9,9 +9,9 @@ var gameOver = false;
 var NameMap = new Map();
 var modal;
 var nameInput;
-var animalsList = ["лось","лисса","волк","заяц","конь",]
-var eatList = ["пицца","суши","лук", "груша", "рис", "сыр"]
-var Namelist
+var animalsList = ["лось","лисса","волк","заяц","конь",];
+var eatList = ["пицца","суши","лук", "груша", "рис", "сыр"];
+var Namelist;
 
 var word;
 
@@ -75,8 +75,6 @@ for (let [key, value] of NameMap) {
     listItem.innerHTML = key + ": " + value;
     mapItems.appendChild(listItem);
 }
-
-
 }
 
 function intialize() {
