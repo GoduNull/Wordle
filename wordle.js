@@ -145,8 +145,9 @@ function intialize() {
 
 function addrezult(){
     var username=document.getElementById("username").innerText;
-    var countet = Number(localStorage.getItem(username.innerText));
-    localStorage.setItem(username, countet+1);
+    var countet = Number(localStorage.getItem(username));
+    countet++;
+    localStorage.setItem(username, countet);
 }
 
 
@@ -248,7 +249,7 @@ function update() { //проверка угаданости слова и обн
 
     console.log(letterCount);
 
-    for (let c = 0; c < width; c++) {
+    for (let c = 0; c < col; c++) {
         let currTile = document.getElementById(row.toString() + '-' + c.toString());
         let letter = currTile.innerText;
 
