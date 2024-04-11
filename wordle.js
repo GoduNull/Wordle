@@ -205,7 +205,7 @@ function processInput(e) {
         document.getElementById("answer").innerText = "Загадонное слово : "+ word+"\n Выберите категорию" ;
     }
 }
-let ContLeeter=col;
+
 function update() { //проверка угаданости слова и обновление состояния 
     let guess = "";
     document.getElementById("answer").innerText = "";
@@ -271,7 +271,7 @@ function update() { //проверка угаданости слова и обн
     }
 
     console.log(letterCount);//тута
-    for (let c = 0; c < ContLeeter; c++) {
+    for (let c = 0; c < col; c++) {
         let currTile = document.getElementById(row.toString() + '-' + c.toString());
         let letter = currTile.innerText;
 
