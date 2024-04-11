@@ -6,16 +6,18 @@ var row = 0;
 var col = 0; 
 
 var gameOver = false;
-
-
-
+var NameMap = new Map();
+var modal;
+var nameInput;
 var animalsList = ["лось","лисса","волк","заяц","конь",]
 var eatList = ["пицца","суши","лук", "груша", "рис", "сыр"]
-
+var Namelist
 
 var word;
 
 window.onload = function(){
+    word = animalsList[Math.floor(Math.random()*animalsList.length)].toUpperCase();
+    console.log(word);
     intialize();
 }
 
@@ -29,39 +31,56 @@ function handleCategoryChange() {
         console.log(word);
         var element = document.getElementById("board");
         element.innerHTML = "";
-        for (let r = 0; r < height; r++) {
-            for (let c = 0; c < width; c++) {
-                let tile = document.createElement("span");
-                tile.id = r.toString() + "-" + c.toString();
-                tile.classList.add("tile");
-                tile.innerText = "";
-                document.getElementById("board").appendChild(tile);
-            }
+        var element1 = document.getElementById("keyboarall");
+        element1.remove();
+        var element = document.getElementById("answer");
+        element.innerHTML = "";
+        var list = document.getElementById("map-items");
+        while (list.firstChild) {
+        list.removeChild(list.firstChild);
         }
+        intialize();
+        gameOver = false;
+        row = 0; 
+        col = 0; 
     }  
     else if (category === "food") {
         word = eatList[Math.floor(Math.random()*eatList.length)].toUpperCase();
         console.log(word);
-
         var element = document.getElementById("board");
         element.innerHTML = "";
-      for (let r = 0; r < height; r++) {
-        for (let c = 0; c < width; c++) {
-            let tile = document.createElement("span");
-            tile.id = r.toString() + "-" + c.toString();
-            tile.classList.add("tile");
-            tile.innerText = "";
-            document.getElementById("board").appendChild(tile);
+        var element1 = document.getElementById("keyboarall");
+        element1.remove();
+        var element = document.getElementById("answer");
+        element.innerHTML = "";
+        var list = document.getElementById("map-items");
+        while (list.firstChild) {
+        list.removeChild(list.firstChild);
         }
-    }
-
+        intialize();
+        gameOver = false;
+    row = 0; 
+    col = 0; 
     }
 }
 
+function LukLocal(){
+let keys=Object.keys(localStorage);
+for(let key of keys){
+    NameMap.set(key,localStorage.getItem(key))
+}
+var mapItems = document.getElementById("map-items");
+for (let [key, value] of NameMap) {
+    var listItem = document.createElement("li");
+    listItem.innerHTML = key + ": " + value;
+    mapItems.appendChild(listItem);
+}
 
 
+}
 
 function intialize() {
+    LukLocal()
 
     for (let r = 0; r < height; r++) {
         for (let c = 0; c < width; c++) {
@@ -85,6 +104,8 @@ function intialize() {
         ["Enter", "Я", "Ч", "С", "М", "И", "Т", "Ь", "Б", "Ю","⌫" ]
     ]
 
+    let keyboarall = document.createElement("div");
+    keyboarall.id="keyboarall";
     for (let i = 0; i < keyboard.length; i++) {
         let currRow = keyboard[i];
         let keyboardRow = document.createElement("div");
@@ -114,12 +135,40 @@ function intialize() {
             }
             keyboardRow.appendChild(keyTile);
         }
-        document.body.appendChild(keyboardRow);
+        keyboarall.appendChild(keyboardRow);
     }
-    
-    document.addEventListener("keyup", (e) => {
-        processInput(e);
-    })
+    if(modal==undefined){
+        modal = document.getElementById("myModal");
+        nameInput = document.getElementById("nameInput");
+        modal.style.display = "block";
+    }
+    document.body.appendChild(keyboarall);
+}
+
+function addrezult(){
+    var username=document.getElementById("username").innerText;
+    var countet = Number(localStorage.getItem(username.innerText));
+    localStorage.setItem(username, countet+1);
+}
+
+
+function saveName() {
+    var name = nameInput.value;
+    console.log("Имя: " + name);
+    var username=document.getElementById("username");
+    var savedName = localStorage.getItem(name);
+    if (!savedName) {
+        console.log("Сохраненное имя: " + savedName);
+        username.innerHTML=name;
+        localStorage.setItem(name, '0');
+        modal.style.display = "none";
+        document.addEventListener("keyup", (e) => {
+            processInput(e);
+        })
+    }
+    else{
+        alert("Такое име существует");
+    }
 }
 
 function processKey() {
@@ -148,15 +197,17 @@ function processInput(e) {
     }
 
     else if (e.code == "Enter") {
-        update();
+        if(col!=0){
+            update();
+        }
     }
 
     if (!gameOver && row == height) {
         gameOver = true;
-        document.getElementById("answer").innerText = word;
+        document.getElementById("answer").innerText = "Загадонное слово : "+ word+"\n Выберите категорию" ;
     }
 }
-
+let ContLeeter=col;
 function update() { //проверка угаданости слова и обновление состояния 
     let guess = "";
     document.getElementById("answer").innerText = "";
@@ -214,20 +265,22 @@ function update() { //проверка угаданости слова и обн
             letterCount[letter] -= 1; 
         }
 
-        if (correct == width) {
+        if (correct == col&& col!=0) {
             gameOver = true;
+            addrezult();
+            document.getElementById("answer").innerText = "Вы угадали слово "+ word+"\n Выберите категорию" ;
         }
     }
 
-    console.log(letterCount);
-    for (let c = 0; c < width; c++) {
+    console.log(letterCount);//тута
+    for (let c = 0; c < ContLeeter; c++) {
         let currTile = document.getElementById(row.toString() + '-' + c.toString());
         let letter = currTile.innerText;
 
 
         if (!currTile.classList.contains("correct")) {
 
-            if (word.includes(letter) && letterCount[letter] > 0) {
+            if (word.includes(letter) && letterCount[letter] > 0) { //примерно подходит
                 currTile.classList.add("present");
                 
                 let keyTile = document.getElementById("Key" + letter);
@@ -238,7 +291,7 @@ function update() { //проверка угаданости слова и обн
             } 
             else {
                 currTile.classList.add("absent");
-                let keyTile = document.getElementById("Key" + letter);
+                let keyTile = document.getElementById("Key" + letter); //отсутствует 
                 keyTile.classList.add("absent")
             }
         }

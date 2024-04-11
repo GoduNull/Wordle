@@ -12,14 +12,29 @@
 
     <body>
         <h1 id="title">Wordle</h1>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+              <h2>Введите ваше имя</h2>
+              <input type="text" id="nameInput" placeholder="Имя">
+              <button onclick="saveName()">Сохранить</button>
+            </div>
+          </div>
+        <h3 id="username">User</h3>
+        <hr>
         <hr>
         <br>
         <label for="category">Выберите категорию:</label>
         <select id="category" onchange="handleCategoryChange()">
   <option value="animals">Животные</option>
   <option value="food">Еда</option>
-</select>
-        <div id="board">
+        </select>
+        <div class="container">
+            <div id="board"></div>
+            <div class="sidebar">
+              <!-- Здесь разместите список с содержимым Map -->
+              <h2>Содержимое Map</h2>
+              <ul id="map-items"></ul>
+            </div>
         </div>
 
         <br>
